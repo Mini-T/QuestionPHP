@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="flex"></div>
+    <h1>Ajouter une question</h1>
+    {{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.slug) }}
+    {{ form_row(form.question) }}
+    <button type="submit">Enregistrer</button>
+    {{ form_end(form) }}
+
+
+{% endblock %}
