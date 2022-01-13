@@ -18,7 +18,7 @@ class QuestionController extends AbstractController
      * @Route("/", name="app_homepage")
      */
     public function homepage()
-    {
+    {   
         return $this->render('question/homepage.html.twig');
     }
 
@@ -58,19 +58,19 @@ class QuestionController extends AbstractController
      */
     public function show(Question $question)
     {
-        return $this->render('question/show.html.twig', ['question' => $question,]);
+        return $this->render('question/show.html.twig', ['question' => $question]);
     }
 
     /**
      * @Route("/questions/{slug}/edit", name="app_question_edit")
      */
-    public function edit(Question $question, Request $request): Response
+    public function edit(Question $question, Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(QuestionType::class, $question);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush()
+            $entityManager->flush();
         }
 
         return $this->render('question/edit.html.twig', [
@@ -79,5 +79,15 @@ class QuestionController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/questions/{slug}/delete", name="app_question_delete")
+     */
+    public function delete(Question $question, EntityManagerInterface $entityManager)
+    {
+        $entityManager->remove($question);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_homepage');
+    }
 }
 

@@ -3,7 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\QuestionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
 #[ORM\Table(name: "questions")]
@@ -16,7 +19,6 @@ class Question
 
     #[ORM\Column(type: 'string', length: 255)]
     private $name;
-
     #[ORM\Column(type: 'string', length: 255, unique: true)]
     private $slug;
 
@@ -26,9 +28,13 @@ class Question
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $askedAt;
+
+    #[ORM\OneToMany(mappedBy: 'question', targetEntity: Answer::class, orphanRemoval: true)]
+    private $answers;
     public function __construct()
     {
         $this->askedAt = new \DateTimeImmutable();
+        $this->answers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -39,6 +45,7 @@ class Question
     public function getName(): ?string
     {
         return $this->name;
+
     }
 
     public function setName(string $name): self
@@ -80,6 +87,36 @@ class Question
     public function setAskedAt(?\DateTimeImmutable $askedAt): self
     {
         $this->askedAt = $askedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Answer[]
+     */
+    public function getAnswers(): Collection
+    {
+        return $this->answers;
+    }
+
+    public function addAnswer(Answer $answer): self
+    {
+        if (!$this->answers->contains($answer)) {
+            $this->answers[] = $answer;
+            $answer->setQuestion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnswer(Answer $answer): self
+    {
+        if ($this->answers->removeElement($answer)) {
+            // set the owning side to null (unless already changed)
+            if ($answer->getQuestion() === $this) {
+                $answer->setQuestion(null);
+            }
+        }
 
         return $this;
     }
