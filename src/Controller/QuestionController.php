@@ -6,6 +6,7 @@ use App\Entity\Question;
 use App\Form\QuestionType;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,9 +25,10 @@ class QuestionController extends AbstractController
 
     /**
      * @Route("/questions/new")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function new(Request $request, EntityManagerInterface $entityManager)
-    {
+    {   $this->denyAccessUnlessGranted("ROLE_SUPER_ADMIN");
         $question = new Question();
         $form = $this->createForm(QuestionType::class, $question);
         $form->handleRequest($request);

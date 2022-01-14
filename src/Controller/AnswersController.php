@@ -36,7 +36,7 @@ class AnswersController extends AbstractController
 
     }
 
-    #[Route('answers/{id}/vote/{direction}', name: 'answers_vote')]
+    #[Route('answers/{id}/vote/{direction<up|down>}', name: 'answers_vote', methods:'POST')]
     public function vote(Answer $answer, $direction, EntityManagerInterface $entityManager){
         $currentVote = $answer->getVotes();
         if ($direction == 'up'){

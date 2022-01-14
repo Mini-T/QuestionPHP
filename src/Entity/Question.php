@@ -29,6 +29,7 @@ class Question
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $askedAt;
 
+    #[ORM\OrderBy(['votes'=>'DESC'])]
     #[ORM\OneToMany(mappedBy: 'question', targetEntity: Answer::class, orphanRemoval: true)]
     private $answers;
     public function __construct()
