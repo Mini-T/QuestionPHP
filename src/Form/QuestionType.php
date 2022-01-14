@@ -14,7 +14,8 @@ class QuestionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', null, [
+            ->add(
+                'name', null, [
                 'label' => 'Nom',
                 'attr' => [
                     'class' => 'UwU'
@@ -23,18 +24,18 @@ class QuestionType extends AbstractType
                 'constraints' => [
                     new NotBlank(),
                     new Length([
-                        'min' => 5,
-                        'max' => 20,
-                        'minMessage' => "pas d'onomatopée stp (- de {{ limit }} lettre)",
-                        'maxMessage' => "pas de monologue stp(+ de {{ limit }} lettre)",
-                    ])
+                            'min' => 5,
+                            'max' => 20,
+                            'minMessage' => "pas d'onomatopée stp (- de {{ limit }} lettre)",
+                            'maxMessage' => "pas de monologue stp(+ de {{ limit }} lettre)",
+                        ]
+                    )
 
                 ]
             ])
             ->add('slug')
             ->add('question')
-            ->add('askedAt')
-        ;
+            ->add('askedAt');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
