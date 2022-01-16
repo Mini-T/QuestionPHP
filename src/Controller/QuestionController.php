@@ -26,16 +26,14 @@ class QuestionController extends AbstractController
 
     /**
      * @Route("/questions/new")
-     * @IsGranted("ROLE_ADMIN")
      */
     public function new(Request $request, EntityManagerInterface $entityManager)
-    {   $this->denyAccessUnlessGranted("ROLE_SUPER_ADMIN");
+    {   $this->denyAccessUnlessGranted("ROLE_ADMIN");
         $question = new Question();
         $form = $this->createForm(QuestionType::class, $question);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $question = $form->getData();
             $entityManager->persist($question);
             $entityManager->flush();
 
